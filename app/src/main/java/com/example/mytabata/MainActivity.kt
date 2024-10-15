@@ -1,6 +1,7 @@
 package com.example.mytabata
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,6 +19,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mytabata.ui.theme.MytabataTheme
+
+var counterState : Boolean = false
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,13 +40,27 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Counter(modifier: Modifier = Modifier) {
-    var theCounter by remember { mutableStateOf("00") }
+    var theCounter by remember { mutableStateOf(0L) }
+
     Column {
         Text(
-            text = "00",
+            text = theCounter.toString(),
             modifier = modifier
         )
-        Button(onClick = {}) {
+        Button(onClick = {
+            if (!counterState) {
+                object : CountDownTimer(99000, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        theCounter = (millisUntilFinished / 1000)
+                    }
+
+                    override fun onFinish() {
+
+                    }
+                }.start()
+                counterState = true
+            }
+        }){
             Text(
                 text = "Pulsar"
             )
