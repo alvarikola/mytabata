@@ -20,8 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MytabataTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    Counter(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -31,17 +30,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Counter(modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "00",
         modifier = modifier
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MytabataTheme {
-        Greeting("Android")
-    }
 }
