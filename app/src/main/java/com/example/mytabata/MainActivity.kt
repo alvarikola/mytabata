@@ -12,15 +12,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.mytabata.ui.theme.MytabataTheme
 
-var counterState : Boolean = false
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,32 +40,48 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Counter(modifier: Modifier = Modifier) {
-    var theCounter by remember { mutableStateOf(0L) }
+    var theCounter by remember { mutableStateOf("30") } // Estado del contador como String
+    var counterState by remember { mutableStateOf(false) } // Para controlar el estado de ejecución del contador
+    var myCounter: CountDownTimer? by remember { mutableStateOf(null) } // Temporizador declarado a nivel superior
 
-    Column {
+    LaunchedEffect(Unit) {
+        myCounter = object : CountDownTimer(30000, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                theCounter = (theCounter.toInt() - 1).toString()
+            }
+
+            override fun onFinish() {
+                counterState = false
+            }
+        }
+
+        if (!counterState) {
+            counterState = true
+        }
+    }
+
+    Column(
+        modifier = Modifier.padding(top = 20.dp)
+            .fillMaxSize(),
+    ) {
         Text(
-            text = theCounter.toString(),
-            modifier = modifier
+            text = theCounter,
+            modifier = Modifier,
         )
-        Button(onClick = {
-            var myCounter = object : CountDownTimer(99000, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    theCounter = (millisUntilFinished / 1000)
-                }
-
-                override fun onFinish() {
-
+        Button(
+            onClick = {
+                if (counterState) {
+                    myCounter?.cancel()
+                    counterState = false
+                } else {
+                    myCounter?.start()
+                    counterState = true
                 }
             }
-            if (!counterState) {
-                myCounter.start()
-                counterState = true
-            } else {
-                myCounter.cancel()
-            }
-        }){
+        ) {
             Text(
-                text = "Pulsar"
+                text = "Iniciar"
             )
         }
     }
