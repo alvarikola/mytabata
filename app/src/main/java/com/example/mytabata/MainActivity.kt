@@ -40,43 +40,24 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Counter(modifier: Modifier = Modifier) {
-    var theCounter by remember { mutableStateOf("30") } // Estado del contador como String
-    var counterState by remember { mutableStateOf(false) } // Para controlar el estado de ejecución del contador
-    var myCounter: CountDownTimer? by remember { mutableStateOf(null) } // Temporizador declarado a nivel superior
-
-    LaunchedEffect(Unit) {
-        myCounter = object : CountDownTimer(30000, 1000) {
-
-            override fun onTick(millisUntilFinished: Long) {
-                theCounter = (theCounter.toInt() - 1).toString()
-            }
-
-            override fun onFinish() {
-                counterState = false
-            }
-        }
-
-        if (!counterState) {
-            counterState = true
-        }
-    }
+    var theCounter by remember { mutableStateOf(0L) }
+    val miCounterDown = CounterDown(99, {newvalue -> theCounter = newvalue})
 
     Column(
         modifier = Modifier.padding(top = 20.dp)
             .fillMaxSize(),
     ) {
         Text(
-            text = theCounter,
+            text = theCounter.toString(),
             modifier = Modifier,
         )
         Button(
             onClick = {
-                if (counterState) {
-                    myCounter?.cancel()
-                    counterState = false
+                if (!miCounterDown.counterState) {
+                    miCounterDown.myCounter.start()
+                    miCounterDown.counterState = true
                 } else {
-                    myCounter?.start()
-                    counterState = true
+                    miCounterDown.myCounter.cancel()
                 }
             }
         ) {
@@ -86,3 +67,6 @@ fun Counter(modifier: Modifier = Modifier) {
         }
     }
 }
+
+
+
