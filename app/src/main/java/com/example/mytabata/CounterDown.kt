@@ -4,32 +4,38 @@ import android.os.CountDownTimer
 import android.util.Log
 
 class CounterDown(var segundos: Int, var loquehacealhacertick: (Long) -> Unit) {
-    var myCounter : CountDownTimer
-    var counterState : Boolean = false
+    private var counterState : Boolean = false
 
-    init {
-        myCounter = object : CountDownTimer((segundos * 1000L), 1000) {
+    val myCounter = object : CountDownTimer((segundos * 1000L), 1000) {
 
-            override fun onTick(millisUntilFinished: Long) {
-                if (!counterState){
-                    loquehacealhacertick(millisUntilFinished / 1000)
-                }
+        override fun onTick(millisUntilFinished: Long) {
+            if (counterState) loquehacealhacertick(millisUntilFinished / 1000)
+        }
 
-//                Log.i("dam2", "tick" + loquehacealhacertick.toString())
-            }
-
-            override fun onFinish() {
-                counterState = false
-            }
+        override fun onFinish() {
+            counterState = false
+            Log.i("dam2", "mensajito")
         }
     }
-    fun start(){
-        counterState = true
-        myCounter.start()
+
+    fun toggle() {
+        Log.i("dam2", "toggle: $counterState")
+        if (this.counterState){
+            this.cancel()
+
+        } else {
+            Log.i("dam2", "toggle: start")
+            this.start()
+        }
     }
 
-    fun cancel(){
+    fun start() {
+        counterState = true
+        this.myCounter.start()
+    }
+
+    fun cancel() {
         counterState = false
-        myCounter.cancel()
+        this.myCounter.cancel()
     }
 }
