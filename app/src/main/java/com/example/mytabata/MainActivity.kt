@@ -427,9 +427,9 @@ fun Counter(modifier: Modifier) {
         }
         PantallaRest()
     }
-    if (!mostrarPantallaRest) {
-        PantallaGetReady()
-    }
+//    if (!mostrarPantallaRest) {
+//        PantallaGetReady()
+//    }
 }
 
 
