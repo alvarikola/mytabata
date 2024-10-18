@@ -3,7 +3,7 @@ package com.example.mytabata
 import android.os.CountDownTimer
 import android.util.Log
 
-class CounterDown(var segundos: Int, var loquehacealhacertick: (Long) -> Unit) {
+class CounterDown(var segundos: Long, var loquehacealhacertick: (Long) -> Unit) {
     private var counterState : Boolean = false
 
     val myCounter = object : CountDownTimer((segundos * 1000L), 1000) {

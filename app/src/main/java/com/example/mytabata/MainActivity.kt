@@ -1,7 +1,7 @@
 package com.example.mytabata
 
 import android.os.Bundle
-import android.os.CountDownTimer
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -20,7 +20,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -54,14 +52,44 @@ class MainActivity : ComponentActivity() {
 }
 
 
+//    Column {
+//        Text(
+//            text = theCounter.toString(),
+//            modifier = Modifier,
+//        )
+//        Button(
+//            onClick = {
+//                miConterDown.toggle()
+//            }
+//        ) {
+//            Text(
+//                text = "Iniciar"
+//            )
+//        }
+//    }
 @Composable
 fun Counter(modifier: Modifier) {
     var mostrarPantalla by remember { mutableStateOf(true) }
-    var timeReset by remember { mutableStateOf(0) }
-    var timeSet by remember { mutableStateOf(0) }
-    var timeWork by remember { mutableStateOf(0) }
-    var theCounter by remember { mutableStateOf(0L) }
-    var miConterDown by remember{ mutableStateOf(CounterDown(99, {newvalue -> theCounter = newvalue}))}
+    var mostrarPantallaGetReady by remember { mutableStateOf(true) }
+    var mostrarPantallaWork by remember { mutableStateOf(true) }
+
+    var tiempoRest by remember { mutableStateOf(0) }
+    var sets by remember { mutableStateOf(0) }
+    var tiempoWork by remember { mutableStateOf(0L) }
+    Log.i("Prueba", tiempoWork.toString())
+    var miConterDownWork by remember{ mutableStateOf(CounterDown(tiempoWork) { newvalue ->
+        tiempoWork = newvalue
+        if (tiempoWork == 0L) { // Comprobar si el contador llegó a cero
+            mostrarPantallaWork = false
+        }
+    })}
+    var theCounter by remember { mutableStateOf(10L) }
+    var miConterDown by remember{ mutableStateOf(CounterDown(theCounter) { newvalue ->
+        theCounter = newvalue
+        if (theCounter == 0L) { // Comprobar si el contador llegó a cero
+            mostrarPantallaGetReady = false
+        }
+    })}
     Column (
         modifier = Modifier
             .padding(20.dp)
@@ -99,8 +127,8 @@ fun Counter(modifier: Modifier) {
                     Text(
                         modifier = Modifier.run {
                             clickable{
-                                if (timeSet > 0){
-                                    timeSet--
+                                if (sets > 0){
+                                    sets--
                                 }
                             }
                                 .padding(10.dp)
@@ -108,15 +136,15 @@ fun Counter(modifier: Modifier) {
                         text = "-"
                     )
                     Text(
-                        text = timeSet.toString(),
+                        text = sets.toString(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         modifier = Modifier.run {
                             clickable{
-                                if (timeSet >= 0){
-                                    timeSet++
+                                if (sets >= 0){
+                                    sets++
                                 }
                             }
                                 .padding(10.dp)
@@ -140,8 +168,8 @@ fun Counter(modifier: Modifier) {
                     Text(
                         modifier = Modifier.run {
                             clickable{
-                                if (timeWork > 0){
-                                    timeWork--
+                                if (tiempoWork > 0){
+                                    tiempoWork--
                                 }
                             }
                                 .padding(10.dp)
@@ -149,15 +177,15 @@ fun Counter(modifier: Modifier) {
                         text = "-",
                     )
                     Text(
-                        text = timeWork.toString(),
+                        text = tiempoWork.toString(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         modifier = Modifier.run {
                             clickable{
-                                if (timeWork >= 0){
-                                    timeWork++
+                                if (tiempoWork >= 0){
+                                    tiempoWork++
                                 }
                             }
                                 .padding(10.dp)
@@ -167,7 +195,7 @@ fun Counter(modifier: Modifier) {
                 }
                 Row {
                     Text(
-                        text = "Reset",
+                        text = "Rest",
                         fontSize = 15.sp,
                         modifier = Modifier.padding(bottom = 10.dp)
                     )
@@ -181,8 +209,8 @@ fun Counter(modifier: Modifier) {
                     Text(
                         modifier = Modifier.run {
                             clickable{
-                                if (timeReset > 0){
-                                    timeReset--
+                                if (tiempoRest > 0){
+                                    tiempoRest--
                                 }
                             }
                                 .padding(10.dp)
@@ -190,15 +218,15 @@ fun Counter(modifier: Modifier) {
                         text = "-"
                     )
                     Text(
-                        text = timeReset.toString(),
+                        text = tiempoRest.toString(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         modifier = Modifier.run {
                             clickable{
-                                if (timeReset >= 0){
-                                    timeReset++
+                                if (tiempoRest >= 0){
+                                    tiempoRest++
                                 }
                             }
                                 .padding(10.dp)
@@ -221,117 +249,129 @@ fun Counter(modifier: Modifier) {
             }
        }
     }
+    @Composable
+    fun PantallaGetReady() {
+        Column (
+            modifier = Modifier
+                .background(Color(0xFFffaf42))
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Row {
+                Text(
+                    text = sets.toString(),
+                    fontSize = 40.sp,
+                )
+            }
+            Row {
+                Text(
+                    text = theCounter.toString(),
+                    fontSize = 80.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Row {
+                Text(
+                    text = "GET READY",
+                    fontSize = 50.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.alpha(0.5f)
+                )
+            }
+            Row (
+                modifier = Modifier
+                    .width(90.dp)
+                    .height(90.dp)
+            ){
+                TextButton(
+                    onClick = {
+                        miConterDown.toggle()
+                    }
+                ) {
+                    Text(
+                        modifier = Modifier,
+                        text = "⏸",
+                        fontSize = 65.sp,
+                        textAlign = TextAlign.Center
+
+                    )
+                }
+            }
+        }
+    }
+    @Composable
+    fun PantallaWork(modifier: Modifier = Modifier){
+        Column (
+            modifier = Modifier
+                .background(Color(0xFF44e372))
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Row {
+                Text(
+                    text = sets.toString(),
+                    fontSize = 40.sp,
+                )
+            }
+            Row {
+                Text(
+                    text = tiempoWork.toString(),
+                    fontSize = 80.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Row {
+                Text(
+                    text = "WORK",
+                    fontSize = 50.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.alpha(0.5f)
+                )
+            }
+            Row (
+                modifier = Modifier
+                    .width(90.dp)
+                    .height(90.dp)
+            ){
+                TextButton(
+                    onClick = {
+                        miConterDownWork.toggle()
+                    }
+                ) {
+                    Text(
+                        modifier = Modifier,
+                        text = "⏸",
+                        fontSize = 65.sp,
+                        textAlign = TextAlign.Center
+
+                    )
+                }
+            }
+        }
+    }
     if (!mostrarPantalla){
-        PrimeraPantalla()
+        PantallaGetReady()
     }
-}
-
-@Composable
-fun PrimeraPantalla() {
-    Column (
-        modifier = Modifier
-            .background(Color(0xFFffaf42))
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Row {
-            Text(
-                text = "6",
-                fontSize = 40.sp,
-            )
-        }
-        Row {
-            Text(
-                text = "10:00",
-                fontSize = 80.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Row {
-            Text(
-                text = "GET READY",
-                fontSize = 50.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.alpha(0.5f)
-            )
-        }
-        Row (
-            modifier = Modifier
-                .width(90.dp)
-                .height(90.dp)
-        ){
-            TextButton(
-                onClick = {
-                    println("hola")
-                }
-            ) {
-                Text(
-                    modifier = Modifier,
-                    text = "⏸",
-                    fontSize = 65.sp,
-                    textAlign = TextAlign.Center
-
-                )
+    if (!mostrarPantallaGetReady){
+        miConterDownWork = CounterDown(tiempoWork) { newvalue ->
+            tiempoWork = newvalue
+            if (tiempoWork == 0L) {
+                mostrarPantallaWork = false
             }
         }
+        PantallaWork()
+    }
+    if (!mostrarPantallaWork){
+        PantallaRest()
     }
 }
-@Composable
-fun SegundaPantalla(modifier: Modifier = Modifier){
-    Column (
-        modifier = Modifier
-            .background(Color(0xFF44e372))
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Row {
-            Text(
-                text = "6",
-                fontSize = 40.sp,
-            )
-        }
-        Row {
-            Text(
-                text = "10:00",
-                fontSize = 80.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Row {
-            Text(
-                text = "WORK",
-                fontSize = 50.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.alpha(0.5f)
-            )
-        }
-        Row (
-            modifier = Modifier
-                .width(90.dp)
-                .height(90.dp)
-        ){
-            TextButton(
-                onClick = {
-                    println("hola")
-                }
-            ) {
-                Text(
-                    modifier = Modifier,
-                    text = "⏸",
-                    fontSize = 65.sp,
-                    textAlign = TextAlign.Center
 
-                )
-            }
-        }
-    }
-}
 @Composable
-fun TerceraPantalla(modifier: Modifier = Modifier){
+fun PantallaRest(modifier: Modifier = Modifier){
     Column (
         modifier = Modifier
             .background(Color(0xFF2196F3))
@@ -382,28 +422,3 @@ fun TerceraPantalla(modifier: Modifier = Modifier){
         }
     }
 }
-
-
-
-
-
-
-//    Column {
-//        Text(
-//            text = theCounter.toString(),
-//            modifier = Modifier,
-//        )
-//        Button(
-//            onClick = {
-//                miConterDown.toggle()
-//            }
-//        ) {
-//            Text(
-//                text = "Iniciar"
-//            )
-//        }
-//    }
-
-
-
-
