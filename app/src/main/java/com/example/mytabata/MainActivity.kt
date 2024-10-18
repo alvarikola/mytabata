@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MytabataTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    TerceraPantalla(
+                    Counter(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -52,8 +53,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
-fun Counter(modifier: Modifier = Modifier) {
+fun Counter(modifier: Modifier) {
+    var mostrarPantalla by remember { mutableStateOf(true) }
+    var timeReset by remember { mutableStateOf(0) }
+    var timeSet by remember { mutableStateOf(0) }
+    var timeWork by remember { mutableStateOf(0) }
     var theCounter by remember { mutableStateOf(0L) }
     var miConterDown by remember{ mutableStateOf(CounterDown(99, {newvalue -> theCounter = newvalue}))}
     Column (
@@ -91,14 +97,30 @@ fun Counter(modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.SpaceAround
                 ){
                     Text(
+                        modifier = Modifier.run {
+                            clickable{
+                                if (timeSet > 0){
+                                    timeSet--
+                                }
+                            }
+                                .padding(10.dp)
+                        },
                         text = "-"
                     )
                     Text(
-                        text = "6",
+                        text = timeSet.toString(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
+                        modifier = Modifier.run {
+                            clickable{
+                                if (timeSet >= 0){
+                                    timeSet++
+                                }
+                            }
+                                .padding(10.dp)
+                        },
                         text = "+"
                     )
                 }
@@ -116,15 +138,31 @@ fun Counter(modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.SpaceAround
                 ){
                     Text(
-                        text = "-"
+                        modifier = Modifier.run {
+                            clickable{
+                                if (timeWork > 0){
+                                    timeWork--
+                                }
+                            }
+                                .padding(10.dp)
+                        },
+                        text = "-",
                     )
                     Text(
-                        text = "6",
+                        text = timeWork.toString(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "+"
+                        modifier = Modifier.run {
+                            clickable{
+                                if (timeWork >= 0){
+                                    timeWork++
+                                }
+                            }
+                                .padding(10.dp)
+                        },
+                        text = "+",
                     )
                 }
                 Row {
@@ -141,14 +179,30 @@ fun Counter(modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.SpaceAround
                 ){
                     Text(
+                        modifier = Modifier.run {
+                            clickable{
+                                if (timeReset > 0){
+                                    timeReset--
+                                }
+                            }
+                                .padding(10.dp)
+                        },
                         text = "-"
                     )
                     Text(
-                        text = "6",
+                        text = timeReset.toString(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
+                        modifier = Modifier.run {
+                            clickable{
+                                if (timeReset >= 0){
+                                    timeReset++
+                                }
+                            }
+                                .padding(10.dp)
+                        },
                         text = "+"
                     )
                 }
@@ -158,7 +212,7 @@ fun Counter(modifier: Modifier = Modifier) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    miConterDown.toggle()
+                    mostrarPantalla = false
                 }
             ) {
                 Text(
@@ -167,10 +221,13 @@ fun Counter(modifier: Modifier = Modifier) {
             }
        }
     }
+    if (!mostrarPantalla){
+        PrimeraPantalla()
+    }
 }
 
 @Composable
-fun PrimeraPantalla(modifier: Modifier = Modifier) {
+fun PrimeraPantalla() {
     Column (
         modifier = Modifier
             .background(Color(0xFFffaf42))
