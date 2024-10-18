@@ -52,41 +52,36 @@ class MainActivity : ComponentActivity() {
 }
 
 
-//    Column {
-//        Text(
-//            text = theCounter.toString(),
-//            modifier = Modifier,
-//        )
-//        Button(
-//            onClick = {
-//                miConterDown.toggle()
-//            }
-//        ) {
-//            Text(
-//                text = "Iniciar"
-//            )
-//        }
-//    }
 @Composable
 fun Counter(modifier: Modifier) {
     var mostrarPantalla by remember { mutableStateOf(true) }
     var mostrarPantallaGetReady by remember { mutableStateOf(true) }
     var mostrarPantallaWork by remember { mutableStateOf(true) }
-
-    var tiempoRest by remember { mutableStateOf(0) }
+    var mostrarPantallaRest by remember { mutableStateOf(true) }
     var sets by remember { mutableStateOf(0) }
+
+    var tiempoRest by remember { mutableStateOf(0L) }
+    var miConterDownRest by remember{ mutableStateOf(CounterDown(tiempoRest) { newvalue ->
+        tiempoRest = newvalue
+        if (tiempoRest == 0L) {
+            mostrarPantallaRest = false
+            sets -= 1
+        }
+    })}
+
     var tiempoWork by remember { mutableStateOf(0L) }
     Log.i("Prueba", tiempoWork.toString())
     var miConterDownWork by remember{ mutableStateOf(CounterDown(tiempoWork) { newvalue ->
         tiempoWork = newvalue
-        if (tiempoWork == 0L) { // Comprobar si el contador llegó a cero
+        if (tiempoWork == 0L) {
             mostrarPantallaWork = false
         }
     })}
+
     var theCounter by remember { mutableStateOf(10L) }
     var miConterDown by remember{ mutableStateOf(CounterDown(theCounter) { newvalue ->
         theCounter = newvalue
-        if (theCounter == 0L) { // Comprobar si el contador llegó a cero
+        if (theCounter == 0L) {
             mostrarPantallaGetReady = false
         }
     })}
@@ -353,6 +348,58 @@ fun Counter(modifier: Modifier) {
             }
         }
     }
+    @Composable
+    fun PantallaRest(modifier: Modifier = Modifier){
+        Column (
+            modifier = Modifier
+                .background(Color(0xFF2196F3))
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Row {
+                Text(
+                    text = sets.toString(),
+                    fontSize = 40.sp,
+                )
+            }
+            Row {
+                Text(
+                    text = tiempoRest.toString(),
+                    fontSize = 80.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Row {
+                Text(
+                    text = "REST",
+                    fontSize = 50.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.alpha(0.5f)
+                )
+            }
+            Row (
+                modifier = Modifier
+                    .width(90.dp)
+                    .height(90.dp)
+            ){
+                TextButton(
+                    onClick = {
+                        miConterDownRest.toggle()
+                    }
+                ) {
+                    Text(
+                        modifier = Modifier,
+                        text = "⏸",
+                        fontSize = 65.sp,
+                        textAlign = TextAlign.Center
+
+                    )
+                }
+            }
+        }
+    }
     if (!mostrarPantalla){
         PantallaGetReady()
     }
@@ -366,59 +413,23 @@ fun Counter(modifier: Modifier) {
         PantallaWork()
     }
     if (!mostrarPantallaWork){
-        PantallaRest()
-    }
-}
-
-@Composable
-fun PantallaRest(modifier: Modifier = Modifier){
-    Column (
-        modifier = Modifier
-            .background(Color(0xFF2196F3))
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Row {
-            Text(
-                text = "6",
-                fontSize = 40.sp,
-            )
-        }
-        Row {
-            Text(
-                text = "10:00",
-                fontSize = 80.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Row {
-            Text(
-                text = "REST",
-                fontSize = 50.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.alpha(0.5f)
-            )
-        }
-        Row (
-            modifier = Modifier
-                .width(90.dp)
-                .height(90.dp)
-        ){
-            TextButton(
-                onClick = {
-                    println("hola")
+        miConterDownRest = CounterDown(tiempoRest){ newvalue ->
+            tiempoRest = newvalue
+            if (tiempoRest == 0L) {
+                mostrarPantallaRest = false
+                sets -= 1
+                if (sets > 0) {
+                    mostrarPantallaGetReady = true // Reinicia a la pantalla de preparación si aún hay sets
+                    tiempoWork = tiempoWork
+                    tiempoRest = tiempoRest
                 }
-            ) {
-                Text(
-                    modifier = Modifier,
-                    text = "⏸",
-                    fontSize = 65.sp,
-                    textAlign = TextAlign.Center
-
-                )
             }
         }
+        PantallaRest()
+    }
+    if (!mostrarPantallaRest) {
+        PantallaGetReady()
     }
 }
+
+
