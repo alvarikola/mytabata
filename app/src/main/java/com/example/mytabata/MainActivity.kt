@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,7 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mytabata.ui.theme.MytabataTheme
@@ -40,7 +43,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MytabataTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    PrimeraPantalla(
+                    TerceraPantalla(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -151,9 +154,7 @@ fun Counter(modifier: Modifier = Modifier) {
                 }
             }
         }
-        Row (
-            horizontalArrangement = Arrangement.End
-        ){
+        Row {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
@@ -162,7 +163,6 @@ fun Counter(modifier: Modifier = Modifier) {
             ) {
                 Text(
                 text = "⚡ START"
-
                 )
             }
        }
@@ -201,23 +201,130 @@ fun PrimeraPantalla(modifier: Modifier = Modifier) {
             )
         }
         Row (
-            modifier = Modifier.width(50.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .width(90.dp)
+                .height(90.dp)
         ){
-            Button(
+            TextButton(
                 onClick = {
                     println("hola")
                 }
             ) {
                 Text(
-                    text = "⏸"
+                    modifier = Modifier,
+                    text = "⏸",
+                    fontSize = 65.sp,
+                    textAlign = TextAlign.Center
 
                 )
             }
         }
     }
 }
+@Composable
+fun SegundaPantalla(modifier: Modifier = Modifier){
+    Column (
+        modifier = Modifier
+            .background(Color(0xFF44e372))
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Row {
+            Text(
+                text = "6",
+                fontSize = 40.sp,
+            )
+        }
+        Row {
+            Text(
+                text = "10:00",
+                fontSize = 80.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Row {
+            Text(
+                text = "WORK",
+                fontSize = 50.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                modifier = Modifier.alpha(0.5f)
+            )
+        }
+        Row (
+            modifier = Modifier
+                .width(90.dp)
+                .height(90.dp)
+        ){
+            TextButton(
+                onClick = {
+                    println("hola")
+                }
+            ) {
+                Text(
+                    modifier = Modifier,
+                    text = "⏸",
+                    fontSize = 65.sp,
+                    textAlign = TextAlign.Center
 
+                )
+            }
+        }
+    }
+}
+@Composable
+fun TerceraPantalla(modifier: Modifier = Modifier){
+    Column (
+        modifier = Modifier
+            .background(Color(0xFF2196F3))
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Row {
+            Text(
+                text = "6",
+                fontSize = 40.sp,
+            )
+        }
+        Row {
+            Text(
+                text = "10:00",
+                fontSize = 80.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Row {
+            Text(
+                text = "REST",
+                fontSize = 50.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                modifier = Modifier.alpha(0.5f)
+            )
+        }
+        Row (
+            modifier = Modifier
+                .width(90.dp)
+                .height(90.dp)
+        ){
+            TextButton(
+                onClick = {
+                    println("hola")
+                }
+            ) {
+                Text(
+                    modifier = Modifier,
+                    text = "⏸",
+                    fontSize = 65.sp,
+                    textAlign = TextAlign.Center
+
+                )
+            }
+        }
+    }
+}
 
 
 
