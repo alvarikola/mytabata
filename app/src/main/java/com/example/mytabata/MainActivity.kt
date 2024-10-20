@@ -412,24 +412,46 @@ fun Counter(modifier: Modifier) {
         }
         PantallaWork()
     }
-    if (!mostrarPantallaWork){
-        miConterDownRest = CounterDown(tiempoRest){ newvalue ->
+    if (!mostrarPantallaWork) {
+        miConterDownRest = CounterDown(tiempoRest) { newvalue ->
             tiempoRest = newvalue
             if (tiempoRest == 0L) {
                 mostrarPantallaRest = false
                 sets -= 1
+
                 if (sets > 0) {
-                    mostrarPantallaGetReady = true // Reinicia a la pantalla de preparación si aún hay sets
+                    mostrarPantallaGetReady = true
+                    mostrarPantallaWork = true
+                    mostrarPantallaRest = true
+
+                    theCounter = 10L
+                    miConterDown = CounterDown(theCounter) { newvalue ->
+                        theCounter = newvalue
+                        if (theCounter == 0L) {
+                            mostrarPantallaGetReady = false
+                        }
+                    }
+
                     tiempoWork = tiempoWork
+                    miConterDownWork = CounterDown(tiempoWork) { newvalue ->
+                        tiempoWork = newvalue
+                        if (tiempoWork == 0L) {
+                            mostrarPantallaWork = false
+                        }
+                    }
+
                     tiempoRest = tiempoRest
+                    miConterDownRest = CounterDown(tiempoRest) { newvalue ->
+                        tiempoRest = newvalue
+                        if (tiempoRest == 0L) {
+                            mostrarPantallaRest = false
+                        }
+                    }
                 }
             }
         }
         PantallaRest()
     }
-//    if (!mostrarPantallaRest) {
-//        PantallaGetReady()
-//    }
 }
 
 
