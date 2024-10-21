@@ -420,19 +420,10 @@ fun Counter(modifier: Modifier) {
                 sets -= 1
 
                 if (sets > 0) {
-                    mostrarPantallaGetReady = true
                     mostrarPantallaWork = true
                     mostrarPantallaRest = true
 
-                    theCounter = 10L
-                    miConterDown = CounterDown(theCounter) { newvalue ->
-                        theCounter = newvalue
-                        if (theCounter == 0L) {
-                            mostrarPantallaGetReady = false
-                        }
-                    }
 
-                    tiempoWork = tiempoWork
                     miConterDownWork = CounterDown(tiempoWork) { newvalue ->
                         tiempoWork = newvalue
                         if (tiempoWork == 0L) {
@@ -440,7 +431,6 @@ fun Counter(modifier: Modifier) {
                         }
                     }
 
-                    tiempoRest = tiempoRest
                     miConterDownRest = CounterDown(tiempoRest) { newvalue ->
                         tiempoRest = newvalue
                         if (tiempoRest == 0L) {
