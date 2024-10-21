@@ -254,6 +254,7 @@ fun Counter(modifier: Modifier) {
             }
        }
     }
+
     @Composable
     fun PantallaGetReady() {
         Column (
@@ -306,6 +307,7 @@ fun Counter(modifier: Modifier) {
             }
         }
     }
+
     @Composable
     fun PantallaWork(modifier: Modifier = Modifier){
         Column (
