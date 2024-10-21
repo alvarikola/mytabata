@@ -410,37 +410,45 @@ fun Counter(modifier: Modifier) {
             }
         }
     }
-    if (!mostrarPantalla){
-        PantallaGetReady()
-    }
-    if (!mostrarPantallaGetReady){
-        miConterDownWork = CounterDown(tiempoWork) { newvalue ->
-            tiempoWork = newvalue
-            if (tiempoWork == 0L) {
-                mostrarPantallaWork = false
-            }
+    if (sets > 0){
+        if (!mostrarPantalla){
+            PantallaGetReady()
         }
-        PantallaWork()
-        miConterDownWork.start()
+        if (!mostrarPantallaGetReady){
+            miConterDownWork = CounterDown(tiempoWork) { newvalue ->
+                tiempoWork = newvalue
+                if (tiempoWork == 0L) {
+                    mostrarPantallaWork = false
+                }
+            }
+            PantallaWork()
+//        miConterDownWork.start()
+        }
+        if (!mostrarPantallaWork) {
+            miConterDownRest = CounterDown(tiempoRest) { newvalue ->
+                tiempoRest = newvalue
+                if (tiempoRest == 0L) {
+                    mostrarPantallaRest = false
+                    sets -= 1
+                }
+            }
+            PantallaRest()
     }
-    if (!mostrarPantallaWork) {
-        miConterDownRest = CounterDown(tiempoRest) { newvalue ->
-            tiempoRest = newvalue
-            if (tiempoRest == 0L) {
-                mostrarPantallaRest = false
-                sets -= 1
 
-            }
-        }
-        PantallaRest()
-        miConterDownRest.start()
+//        miConterDownRest.start()
     }
-    if (!mostrarPantallaRest) {
-        if (sets > 0) {
-            mostrarPantallaWork = true
-            mostrarPantallaRest = true
-        }
+    else {
+        mostrarPantalla = true
     }
+//    if (!mostrarPantallaRest) {
+//        if (sets > 0) {
+//            mostrarPantallaWork = true
+//            mostrarPantallaRest = true
+//        }
+//        else {
+//            mostrarPantalla = true
+//        }
+//    }
 }
 
 
