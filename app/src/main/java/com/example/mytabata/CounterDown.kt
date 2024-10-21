@@ -3,6 +3,7 @@ package com.example.mytabata
 import android.os.CountDownTimer
 import android.util.Log
 
+
 class CounterDown(var segundos: Long, var loquehacealhacertick: (Long) -> Unit) {
     private var counterState : Boolean = false
 
@@ -37,10 +38,5 @@ class CounterDown(var segundos: Long, var loquehacealhacertick: (Long) -> Unit) 
     fun cancel() {
         counterState = false
         this.myCounter.cancel()
-    }
-    private fun formatTime(seconds: Long): String {
-        val minutes = seconds / 60
-        val secs = seconds % 60
-        return String.format("%02d:%02d", minutes, secs)
     }
 }

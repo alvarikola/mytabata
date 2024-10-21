@@ -421,6 +421,7 @@ fun Counter(modifier: Modifier) {
             }
         }
         PantallaWork()
+        miConterDownWork.start()
     }
     if (!mostrarPantallaWork) {
         miConterDownRest = CounterDown(tiempoRest) { newvalue ->
@@ -432,26 +433,12 @@ fun Counter(modifier: Modifier) {
             }
         }
         PantallaRest()
+        miConterDownRest.start()
     }
     if (!mostrarPantallaRest) {
         if (sets > 0) {
             mostrarPantallaWork = true
             mostrarPantallaRest = true
-
-
-            miConterDownWork = CounterDown(tiempoWork) { newvalue ->
-                tiempoWork = newvalue
-                if (tiempoWork == 0L) {
-                    mostrarPantallaWork = false
-                }
-            }
-
-            miConterDownRest = CounterDown(tiempoRest) { newvalue ->
-                tiempoRest = newvalue
-                if (tiempoRest == 0L) {
-                    mostrarPantallaRest = false
-                }
-            }
         }
     }
 }
