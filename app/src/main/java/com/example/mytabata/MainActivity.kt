@@ -164,7 +164,12 @@ fun Counter(modifier: Modifier) {
                         modifier = Modifier.run {
                             clickable{
                                 if (tiempoWork > 0){
-                                    tiempoWork--
+                                    if (tiempoWork > 15){
+                                        tiempoWork-= 15
+                                    }
+                                    else {
+                                        tiempoWork --
+                                    }
                                 }
                             }
                                 .padding(10.dp)
@@ -172,7 +177,7 @@ fun Counter(modifier: Modifier) {
                         text = "-",
                     )
                     Text(
-                        text = tiempoWork.toString(),
+                        text = String.format("%02d:%02d", tiempoWork / 60, tiempoWork % 60),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -180,7 +185,7 @@ fun Counter(modifier: Modifier) {
                         modifier = Modifier.run {
                             clickable{
                                 if (tiempoWork >= 0){
-                                    tiempoWork++
+                                    tiempoWork+= 15
                                 }
                             }
                                 .padding(10.dp)
@@ -205,7 +210,12 @@ fun Counter(modifier: Modifier) {
                         modifier = Modifier.run {
                             clickable{
                                 if (tiempoRest > 0){
-                                    tiempoRest--
+                                    if (tiempoRest > 15){
+                                        tiempoRest-= 15
+                                    }
+                                    else {
+                                        tiempoRest --
+                                    }
                                 }
                             }
                                 .padding(10.dp)
@@ -213,7 +223,7 @@ fun Counter(modifier: Modifier) {
                         text = "-"
                     )
                     Text(
-                        text = tiempoRest.toString(),
+                        text = String.format("%02d:%02d", tiempoRest / 60, tiempoRest % 60),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -221,7 +231,7 @@ fun Counter(modifier: Modifier) {
                         modifier = Modifier.run {
                             clickable{
                                 if (tiempoRest >= 0){
-                                    tiempoRest++
+                                    tiempoRest+= 15
                                 }
                             }
                                 .padding(10.dp)
@@ -261,7 +271,7 @@ fun Counter(modifier: Modifier) {
             }
             Row {
                 Text(
-                    text = theCounter.toString(),
+                    text = String.format("%02d:%02d", theCounter / 60, theCounter % 60),
                     fontSize = 80.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -313,7 +323,7 @@ fun Counter(modifier: Modifier) {
             }
             Row {
                 Text(
-                    text = tiempoWork.toString(),
+                    text = String.format("%02d:%02d", tiempoWork / 60, tiempoWork % 60),
                     fontSize = 80.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -365,7 +375,7 @@ fun Counter(modifier: Modifier) {
             }
             Row {
                 Text(
-                    text = tiempoRest.toString(),
+                    text = String.format("%02d:%02d", tiempoRest / 60, tiempoRest % 60),
                     fontSize = 80.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -419,28 +429,30 @@ fun Counter(modifier: Modifier) {
                 mostrarPantallaRest = false
                 sets -= 1
 
-                if (sets > 0) {
-                    mostrarPantallaWork = true
-                    mostrarPantallaRest = true
-
-
-                    miConterDownWork = CounterDown(tiempoWork) { newvalue ->
-                        tiempoWork = newvalue
-                        if (tiempoWork == 0L) {
-                            mostrarPantallaWork = false
-                        }
-                    }
-
-                    miConterDownRest = CounterDown(tiempoRest) { newvalue ->
-                        tiempoRest = newvalue
-                        if (tiempoRest == 0L) {
-                            mostrarPantallaRest = false
-                        }
-                    }
-                }
             }
         }
         PantallaRest()
+    }
+    if (!mostrarPantallaRest) {
+        if (sets > 0) {
+            mostrarPantallaWork = true
+            mostrarPantallaRest = true
+
+
+            miConterDownWork = CounterDown(tiempoWork) { newvalue ->
+                tiempoWork = newvalue
+                if (tiempoWork == 0L) {
+                    mostrarPantallaWork = false
+                }
+            }
+
+            miConterDownRest = CounterDown(tiempoRest) { newvalue ->
+                tiempoRest = newvalue
+                if (tiempoRest == 0L) {
+                    mostrarPantallaRest = false
+                }
+            }
+        }
     }
 }
 

@@ -38,4 +38,9 @@ class CounterDown(var segundos: Long, var loquehacealhacertick: (Long) -> Unit) 
         counterState = false
         this.myCounter.cancel()
     }
+    private fun formatTime(seconds: Long): String {
+        val minutes = seconds / 60
+        val secs = seconds % 60
+        return String.format("%02d:%02d", minutes, secs)
+    }
 }
